@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <corpus corpusname="corpus" target="">
+	<head>
+		<meta>
+			<format>
+			NeGra format, version 3</format>
+		</meta>
+		<frames xmlns="http://www.clt-st.de/framenet/frame-database">
+		</frames>
+		<wordtags xmlns="http://www.clt-st.de/salsa/wordtags">
+		</wordtags>
+		<flags>
+		</flags>
+		<annotation>
+			<edgelabel>
+			</edgelabel>
+			<secedgelabel>
+			</secedgelabel>
+		</annotation>
+	</head>
+	<body>
+<s id='pruebaTimeMlSem._0'>
+<graph root='pruebaTimeMlSem._0_510'>
+<terminals>
+<t id='pruebaTimeMlSem._0_0' pos='IN' word='On' lemma='on'>
+</t>
+<t id='pruebaTimeMlSem._0_1' pos='DT' word='the' lemma='the'>
+</t>
+<t id='pruebaTimeMlSem._0_2' pos='JJ' word='other' lemma='other'>
+</t>
+<t id='pruebaTimeMlSem._0_3' pos='NN' word='hand' lemma='hand'>
+</t>
+<t id='pruebaTimeMlSem._0_4' pos='PUNC,' word=',' lemma=','>
+</t>
+<t id='pruebaTimeMlSem._0_5' pos='NNS' word='it&apos;s' lemma='&lt;unknown&gt;'>
+</t>
+<t id='pruebaTimeMlSem._0_6' pos='VBG' word='turning' lemma='turn'>
+</t>
+<t id='pruebaTimeMlSem._0_7' pos='RP' word='out' lemma='out'>
+</t>
+<t id='pruebaTimeMlSem._0_8' pos='TO' word='to' lemma='to'>
+</t>
+<t id='pruebaTimeMlSem._0_9' pos='VB' word='be' lemma='be'>
+</t>
+<t id='pruebaTimeMlSem._0_10' pos='DT' word='another' lemma='another'>
+</t>
+<t id='pruebaTimeMlSem._0_11' pos='RB' word='very' lemma='very'>
+</t>
+<t id='pruebaTimeMlSem._0_12' pos='JJ' word='bad' lemma='bad'>
+</t>
+<t id='pruebaTimeMlSem._0_13' pos='JJ' word='financial' lemma='financial'>
+</t>
+<t id='pruebaTimeMlSem._0_14' pos='NN' word='week' lemma='week'>
+</t>
+<t id='pruebaTimeMlSem._0_15' pos='IN' word='for' lemma='for'>
+</t>
+<t id='pruebaTimeMlSem._0_16' pos='NNP' word='Asia' lemma='Asia'>
+</t>
+<t id='pruebaTimeMlSem._0_17' pos='PUNC.' word='.' lemma='.'>
+</t>
+</terminals>
+<nonterminals>
+<nt id='pruebaTimeMlSem._0_509' head='it&apos;s' cat='NP'>
+<edge label='-' idref='pruebaTimeMlSem._0_5'/>
+<edge label='-' idref='pruebaTimeMlSem._0_508'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_508' head='turning' cat='VP'>
+<edge label='-' idref='pruebaTimeMlSem._0_6'/>
+<edge label='-' idref='pruebaTimeMlSem._0_7'/>
+<edge label='-' idref='pruebaTimeMlSem._0_507'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_507' head='to' cat='VP'>
+<edge label='-' idref='pruebaTimeMlSem._0_8'/>
+<edge label='-' idref='pruebaTimeMlSem._0_506'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_506' head='be' cat='VP-A'>
+<edge label='-' idref='pruebaTimeMlSem._0_9'/>
+<edge label='-' idref='pruebaTimeMlSem._0_503'/>
+<edge label='-' idref='pruebaTimeMlSem._0_505'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_505' head='for' cat='PP'>
+<edge label='-' idref='pruebaTimeMlSem._0_15'/>
+<edge label='-' idref='pruebaTimeMlSem._0_504'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_504' head='Asia' cat='NPB'>
+<edge label='-' idref='pruebaTimeMlSem._0_16'/>
+<edge label='-' idref='pruebaTimeMlSem._0_17'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_503' head='week' cat='NPB'>
+<edge label='-' idref='pruebaTimeMlSem._0_10'/>
+<edge label='-' idref='pruebaTimeMlSem._0_502'/>
+<edge label='-' idref='pruebaTimeMlSem._0_13'/>
+<edge label='-' idref='pruebaTimeMlSem._0_14'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_502' head='bad' cat='ADJP'>
+<edge label='-' idref='pruebaTimeMlSem._0_11'/>
+<edge label='-' idref='pruebaTimeMlSem._0_12'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_501' head='On' cat='PP'>
+<edge label='-' idref='pruebaTimeMlSem._0_0'/>
+<edge label='-' idref='pruebaTimeMlSem._0_500'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_500' head='hand' cat='NPB'>
+<edge label='-' idref='pruebaTimeMlSem._0_1'/>
+<edge label='-' idref='pruebaTimeMlSem._0_2'/>
+<edge label='-' idref='pruebaTimeMlSem._0_3'/>
+<edge label='-' idref='pruebaTimeMlSem._0_4'/>
+</nt>
+<nt id='pruebaTimeMlSem._0_510' head='it&apos;s' cat='FRAG'>
+<edge label='-' idref='pruebaTimeMlSem._0_501'/>
+<edge label='-' idref='pruebaTimeMlSem._0_509'/>
+</nt>
+</nonterminals>
+</graph>
+<sem>
+<globals>
+</globals>
+<frames>
+<frame name='Desirability' id='pruebaTimeMlSem._0_f1382048405.26032'>
+<target id='pruebaTimeMlSem._0_f1382048405.26032_fe1382048405.26044' pos='adj' lemma='bad'>
+<fenode idref='pruebaTimeMlSem._0_12'/>
+</target>
+<fe name='Evaluee' id='pruebaTimeMlSem._0_f1382048405.26032_fe1382048440.50921'>
+<fenode idref='pruebaTimeMlSem._0_14'/>
+</fe>
+<fe name='Degree' id='pruebaTimeMlSem._0_f1382048405.26032_fe1382048440.51197'>
+<fenode idref='pruebaTimeMlSem._0_11'/>
+</fe>
+<fe name='Affected_party' id='pruebaTimeMlSem._0_f1382048405.26032_fe1382048440.51459'>
+<fenode idref='pruebaTimeMlSem._0_505'/>
+</fe>
+</frame>
+<frame name='Observable_bodyparts' id='pruebaTimeMlSem._0_f1382048405.26058'>
+<target id='pruebaTimeMlSem._0_f1382048405.26058_fe1382048405.26068' pos='noun' lemma='hand'>
+<fenode idref='pruebaTimeMlSem._0_3'/>
+</target>
+<fe name='Body_part' id='pruebaTimeMlSem._0_f1382048405.26058_fe1382048440.51609'>
+<fenode idref='pruebaTimeMlSem._0_3'/>
+</fe>
+<fe name='Descriptor' id='pruebaTimeMlSem._0_f1382048405.26058_fe1382048440.51755'>
+<fenode idref='pruebaTimeMlSem._0_2'/>
+</fe>
+</frame>
+<frame name='Contingency' id='pruebaTimeMlSem._0_f1382048405.2608'>
+<target id='pruebaTimeMlSem._0_f1382048405.2608_fe1382048405.2609' pos='verb' lemma='turn'>
+<fenode idref='pruebaTimeMlSem._0_6'/>
+</target>
+<fe name='Outcome' id='pruebaTimeMlSem._0_f1382048405.2608_fe1382048440.51889'>
+<fenode idref='pruebaTimeMlSem._0_5'/>
+</fe>
+<fe name='Determinant' id='pruebaTimeMlSem._0_f1382048405.2608_fe1382048440.5199'>
+<fenode idref='pruebaTimeMlSem._0_501'/>
+</fe>
+</frame>
+</frames>
+<usp>
+<uspframes>
+</uspframes>
+<uspfes>
+</uspfes>
+</usp>
+</sem>
+</s>
+
+
+	</body>
+</corpus>
