@@ -1,6 +1,8 @@
 package transformador;
 import javax.xml.transform.TransformerException;
 
+import transformador.formatoFramenet.Utils;
+
 
 public class Principal2 {
 
@@ -15,8 +17,20 @@ public class Principal2 {
 //		ArrayList<Oracion> oraciones=parrafos.get(0).getListaOraciones();
 		
 		ArchivoFormatoSalsa archivoSalsa2 = new ArchivoFormatoSalsa();
-
-		archivoSalsa2.guardarAArchivo("/home/miguel/Documentos/PruebaConversorSalsaMejorado/base.xml");
+		
+		GraphSalsa graph= new GraphSalsa(Utils.getGraphId());
+		TerminalSalsa t=new TerminalSalsa(Utils.getTId(), "", "", "Hola");
+		graph.agregarNodoTerminal(t);
+		NoTerminalSalsa nt=new NoTerminalSalsa(Utils.getNtId(), "", "");
+		EdgeSalsa edge = new EdgeSalsa(t, "");
+		nt.agregarEdge(edge);
+		graph.agregarNodoNoTerminal(nt);
+		
+		OracionSalsa s = new OracionSalsa(Utils.getSId(), graph, null);
+		archivoSalsa2.agregarOracion(s);
+		
+		
+		archivoSalsa2.guardarAArchivo("base.xml");
 	}
 
 }

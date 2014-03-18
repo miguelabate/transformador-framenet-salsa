@@ -15,4 +15,20 @@ public class Utils {
 	public static String getFeId() {
 		return String.valueOf(id++)+"idFe";
 	}
+
+	public static String getSId() {
+		return String.valueOf(id++)+"idS";
+	}
+
+	public static String getGraphId() {
+		return String.valueOf(id++)+"idGraph";
+	}
+
+	public static String getTId() {
+		return String.valueOf(id++)+"idT";
+	}
+
+	public static String getNtId() {
+		return String.valueOf(id++)+"idNt";
+	}
 }

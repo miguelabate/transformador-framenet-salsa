@@ -113,8 +113,7 @@
 </nonterminals>
 </graph>
 <sem>
-<globals>
-</globals>
+
 <frames>
 <frame name='Desirability' id='pruebaTimeMlSem._0_f1382048405.26032'>
 <target id='pruebaTimeMlSem._0_f1382048405.26032_fe1382048405.26044' pos='adj' lemma='bad'>
@@ -153,12 +152,7 @@
 </fe>
 </frame>
 </frames>
-<usp>
-<uspframes>
-</uspframes>
-<uspfes>
-</uspfes>
-</usp>
+
 </sem>
 </s>
 
