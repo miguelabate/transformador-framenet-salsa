@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><corpus corpusname="corpus" target="">
+	<head>
+		<meta>
+			<format>
+			NeGra format, version 3</format>
+		</meta>
+		<frames xmlns="http://www.clt-st.de/framenet/frame-database">
+		</frames>
+		<wordtags xmlns="http://www.clt-st.de/salsa/wordtags">
+		</wordtags>
+		<flags>
+		</flags>
+		<annotation>
+			<edgelabel>
+			</edgelabel>
+			<secedgelabel>
+			</secedgelabel>
+		</annotation>
+	</head>
+	<body>
+
+</body>
+</corpus>
