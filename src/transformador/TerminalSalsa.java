@@ -36,4 +36,9 @@ public class TerminalSalsa implements ReferenciablePorUnEdgeSalsa{
 	public String getId() {
 		return id;
 	}
+
+
+	public String getWord() {
+		return word;
+	}
 }

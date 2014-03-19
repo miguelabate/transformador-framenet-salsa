@@ -7,22 +7,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 public class GraphSalsa {
-	private String root;//id
-	private ArrayList<TerminalSalsa> listaNodosTerminales=new ArrayList<TerminalSalsa>();;
+	private String root;//id de referncia 
+	private OracionSalsa oracion;//necesito la referncia la oracion para reconstruirla cuando agrego los terminos 
+	private ArrayList<TerminalSalsa> listaNodosTerminales=new ArrayList<TerminalSalsa>();
 	private ArrayList<NoTerminalSalsa> listaNodosNoTerminales=new ArrayList<NoTerminalSalsa>();
 	
-	public GraphSalsa(String root,
-			ArrayList<TerminalSalsa> listaNodosTerminales,
-			ArrayList<NoTerminalSalsa> listaNodosNoTerminales) {
+	public GraphSalsa() {
 		super();
-		this.root = root;
-		this.listaNodosTerminales = listaNodosTerminales;
-		this.listaNodosNoTerminales = listaNodosNoTerminales;
-	}
-
-	public GraphSalsa(String root) {
-		super();
-		this.root = root;
 	}
 	
 	public Node obtenerNodo(Document doc){
@@ -44,9 +35,26 @@ public class GraphSalsa {
 	
 	public void agregarNodoTerminal(TerminalSalsa t){
 		this.listaNodosTerminales.add(t);
+		this.oracion.actualizarMapa(t.getWord(), t.getId());
 	}
 	
 	public void agregarNodoNoTerminal(NoTerminalSalsa nt){
 		this.listaNodosNoTerminales.add(nt);
+	}
+
+	public OracionSalsa getOracion() {
+		return oracion;
+	}
+
+	public void setOracion(OracionSalsa oracion) {
+		this.oracion = oracion;
+	}
+
+	public String getRoot() {
+		return root;
+	}
+
+	public void setRoot(String root) {
+		this.root = root;
 	}
 }
