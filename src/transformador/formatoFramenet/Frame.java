@@ -26,5 +26,17 @@ public class Frame {
 		}
 	}
 
+	public String getFrameName() {
+		return frameName;
+	}
+
+	public Label getTarget() {
+		return target;
+	}
+
+	public ArrayList<Label> getListaFE() {
+		return listaFE;
+	}
+
 	
 }

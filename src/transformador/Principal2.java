@@ -1,8 +1,6 @@
 package transformador;
 import javax.xml.transform.TransformerException;
 
-import com.sun.org.apache.xerces.internal.util.FeatureState;
-
 import transformador.formatoFramenet.Utils;
 
 
@@ -13,11 +11,6 @@ public class Principal2 {
 	 * @throws TransformerException 
 	 */
 	public static void main(String[] args) throws TransformerException {
-//		ArchivoFormatoFramenet archivFrame = new ArchivoFormatoFramenet("prueba", "/home/miguel/Escritorio/miguel/Documentos/PruebaTimeML4/eisenRawText.txt.out");
-//		ArrayList<Documento> docs =archivFrame.getListaDocumentos();
-//		ArrayList<Parrafo> parrafos=docs.get(0).getListaParrafos();
-//		ArrayList<Oracion> oraciones=parrafos.get(0).getListaOraciones();
-		
 		ArchivoFormatoSalsa archivoSalsa2 = new ArchivoFormatoSalsa();
 		
 		//creo el graphico

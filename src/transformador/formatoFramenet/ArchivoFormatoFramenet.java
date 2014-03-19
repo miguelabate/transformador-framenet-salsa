@@ -12,14 +12,24 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import transformador.ArchivoFormatoSalsa;
+import transformador.EdgeSalsa;
+import transformador.FeNodeSalsa;
+import transformador.FeSalsa;
+import transformador.FrameSalsa;
+import transformador.GraphSalsa;
+import transformador.NoTerminalSalsa;
+import transformador.OracionSalsa;
+import transformador.SemSalsa;
+import transformador.TargetSalsa;
+import transformador.TerminalSalsa;
+
 
 public class ArchivoFormatoFramenet {
-	String nombre;
 	ArrayList<Documento> listaDocumentos = new ArrayList<Documento>();
 	
-	public ArchivoFormatoFramenet(String nombre, String pathArchivoXML) {
+	public ArchivoFormatoFramenet(String pathArchivoXML) {
 		super();
-		this.nombre=nombre;
 		
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -43,5 +53,6 @@ public class ArchivoFormatoFramenet {
 	public ArrayList<Documento> getListaDocumentos() {
 		return listaDocumentos;
 	}
+
 
 }

@@ -13,7 +13,6 @@ import transformador.OracionSalsa;
 
 public class Oracion {
 
-
 	String texto;
 	ArrayList<Frame> listaDeFramesAnotados= new ArrayList<Frame>();
 	
@@ -24,6 +23,14 @@ public class Oracion {
 			this.listaDeFramesAnotados.add(new Frame((Element)annotationSets.item(i)));
 			
 		}
+	}
+
+	public ArrayList<Frame> getListaDeFramesAnotados() {
+		return listaDeFramesAnotados;
+	}
+
+	public String getTexto() {
+		return texto;
 	}
 	
 }

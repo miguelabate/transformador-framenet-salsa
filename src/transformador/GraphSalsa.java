@@ -35,7 +35,7 @@ public class GraphSalsa {
 	
 	public void agregarNodoTerminal(TerminalSalsa t){
 		this.listaNodosTerminales.add(t);
-		this.oracion.actualizarMapa(t.getWord(), t.getId());
+		this.oracion.actualizarMapa(t);
 	}
 	
 	public void agregarNodoNoTerminal(NoTerminalSalsa nt){

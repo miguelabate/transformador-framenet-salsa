@@ -1,5 +1,6 @@
 package transformador;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.w3c.dom.Document;
@@ -43,6 +44,36 @@ public class OracionSalsa {
 	}
 	
 	/**
+	 * Obtener rango ID Ej: pruebaTimeMlSem._0_0
+	 * @param start
+	 * @return
+	 */
+	public ArrayList<String> obtenerRangoIdSegunIndice(int start, int end){
+		ArrayList<String> resultado= new ArrayList<String>();
+		for(int i=start;i<=end;i++){
+			String clave=String.valueOf(i);
+			String id= this.mapaIndiceId.get(clave);
+			if(id!=null) resultado.add(id);
+		}
+		return resultado;
+	}
+	
+	/**
+	 * Obtener rango palabras
+	 * @param start
+	 * @return
+	 */
+	public ArrayList<String> obtenerRangoPalabraIndice(int start, int end){
+		ArrayList<String> resultado= new ArrayList<String>();
+		for(int i=start;i<=end;i++){
+			String clave=String.valueOf(i);
+			String palabra=  this.mapaIdPalabra.get(this.mapaIndiceId.get(clave));
+			if(palabra!=null) resultado.add(palabra);
+		}
+		return resultado;
+	}
+	
+	/**
 	 * Obtener ID pruebaTimeMlSem._0_0
 	 * @param start
 	 * @return
@@ -52,7 +83,9 @@ public class OracionSalsa {
 		return this.mapaIndiceId.get(clave);
 	}
 	
-	public void actualizarMapa(String palabra, String id){
+	public void actualizarMapa(TerminalSalsa t){
+		String palabra=t.getWord();
+		String id=t.getId();
 		//completo mapas
 		this.mapaIndiceId.put(String.valueOf((oracion.length())),id);
 		this.oracion+=palabra+" ";
