@@ -17,4 +17,12 @@ public class Label {
 	public String getName() {
 		return name;
 	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public int getEnd() {
+		return end;
+	}
 }

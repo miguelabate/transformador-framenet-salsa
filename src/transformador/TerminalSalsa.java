@@ -41,4 +41,10 @@ public class TerminalSalsa implements ReferenciablePorUnEdgeSalsa{
 	public String getWord() {
 		return word;
 	}
+
+
+	@Override
+	public String toString() {
+		return "TerminalSalsa [id=" + id + ", word=" + word + "]";
+	}
 }
