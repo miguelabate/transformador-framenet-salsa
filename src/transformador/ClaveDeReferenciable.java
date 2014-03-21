@@ -17,7 +17,7 @@ public class ClaveDeReferenciable {
 	}
 
 	public boolean estaIncluidoEn(ClaveDeReferenciable o) {
-		if(o.getStart()>=this.getStart()&&o.getEnd()>=this.getEnd())return true;
+		if(o.getStart()<=this.getStart()&&o.getEnd()>=this.getEnd())return true;
 		return false;
 	}
 

@@ -12,6 +12,7 @@ import transformador.formatoFramenet.Utils;
 public class ConversorArchivoSalsa {
 	private ArchivoFormatoFramenet archivoFramenet;
 	private HashMap<ClaveDeReferenciable, ReferenciablePorUnEdgeSalsa> tablaReferenciables = new HashMap<ClaveDeReferenciable, ReferenciablePorUnEdgeSalsa>();
+	private ArrayList<NoTerminalSalsa> listaNoTerminales = new ArrayList<NoTerminalSalsa>();
 	
 	public ConversorArchivoSalsa(ArchivoFormatoFramenet archivoFramenet) {
 		super();
@@ -36,18 +37,24 @@ public class ConversorArchivoSalsa {
 		agregarATablaDeReferenciables(listaTerminales);
 		//seteo el root
 		graph.setRoot(t.getId());
-		//agrego nodo no terminal
-//		NoTerminalSalsa nt=new NoTerminalSalsa(Utils.getNtId(), "", "");
-		//agrego un vertice al no terminal
-//		EdgeSalsa edge = new EdgeSalsa(t, "");
-//		nt.agregarEdge(edge);
-//		graph.agregarNodoNoTerminal(nt);
+
 		
 		//agrego los frames
 		ArrayList<FrameSalsa> listaFramesSalsa = crearListaFramesSalsa(archivoFramenet.getListaDocumentos().get(0).getListaParrafos().get(0).getListaOraciones().get(0));
 		for(FrameSalsa unFrameSalsa:listaFramesSalsa){
 			sem.agregarFrame(unFrameSalsa);
 		}
+		
+		//agrego nodo no terminal
+		for(NoTerminalSalsa ntSalsa:this.listaNoTerminales){
+			graph.agregarNodoNoTerminal(ntSalsa);
+		}
+//		NoTerminalSalsa nt=new NoTerminalSalsa(Utils.getNtId(), "", "");
+		//agrego un vertice al no terminal
+//		EdgeSalsa edge = new EdgeSalsa(t, "");
+//		nt.agregarEdge(edge);
+//		graph.agregarNodoNoTerminal(nt);
+		
 		//		FrameSalsa unFrame=new FrameSalsa("Mi_Frame", Utils.getFrameId());
 //		sem.agregarFrame(unFrame);
 //		FeSalsa unFeSalsa = new FeSalsa(Utils.getFeId(), "un_fe");
@@ -91,13 +98,14 @@ public class ConversorArchivoSalsa {
 			for(Label frameElement:unFrame.getListaFE()){
 				FeSalsa unFeSalsa=new FeSalsa(Utils.getFeId(), frameElement.getName());
 				FeNodeSalsa unFeNodeSalsa = new FeNodeSalsa();
-				ClaveDeReferenciable clave= new ClaveDeReferenciable(frameElement.getStart(),frameElement.getEnd());
+				ClaveDeReferenciable clave= new ClaveDeReferenciable(frameElement.getStart(),frameElement.getEnd()+1);
 				if(!this.tablaReferenciables.containsKey(clave)){
 					NoTerminalSalsa noTerminalSalsa=new NoTerminalSalsa(Utils.getNtId(), "", "");
 					//creo los edges y se los agrego al noterminal TODO
 					ArrayList<EdgeSalsa> listaEdges = obtenerListaEdges(clave);
 					for(EdgeSalsa unEdgeSalsa:listaEdges)noTerminalSalsa.agregarEdge(unEdgeSalsa);
 					//this.tablaReferenciables.put(clave, noTerminalSalsa);//lo agrego, por ahora no
+					listaNoTerminales.add(noTerminalSalsa);
 					unFeNodeSalsa.setReferencia(noTerminalSalsa);
 				}else//si esta en la tabla
 				{
@@ -110,13 +118,14 @@ public class ConversorArchivoSalsa {
 			Label target=unFrame.getTarget();
 			TargetSalsa targetSalsa = new TargetSalsa(Utils.getTargetId(), "", target.getName());
 			FeNodeSalsa unFeNodeSalsa = new FeNodeSalsa();
-			ClaveDeReferenciable clave= new ClaveDeReferenciable(target.getStart(),target.getEnd());
+			ClaveDeReferenciable clave= new ClaveDeReferenciable(target.getStart(),target.getEnd()+1);
 			if(!this.tablaReferenciables.containsKey(clave)){
 				NoTerminalSalsa noTerminalSalsa=new NoTerminalSalsa(Utils.getNtId(), "", "");
 				//creo los edges y se los agrego al noterminal TODO
 				ArrayList<EdgeSalsa> listaEdges = obtenerListaEdges(clave);
 				for(EdgeSalsa unEdgeSalsa:listaEdges)noTerminalSalsa.agregarEdge(unEdgeSalsa);
 				//this.tablaReferenciables.put(clave, noTerminalSalsa);//POR AHORA NO AGREGO NODOS COMPUESTOS, SIEMPRE REFIERO AL TERMINAL. Hacer lista de No terminales, no usar. pero agregarlos al xml final.
+				listaNoTerminales.add(noTerminalSalsa);
 				unFeNodeSalsa.setReferencia(noTerminalSalsa);
 			}else//si esta en la tabla
 			{
