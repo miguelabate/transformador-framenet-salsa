@@ -7,10 +7,15 @@ public class Label {
 	int 	start;
 	int 	end;
 	String	name;
+	String itype; //a veces aparece cuando no esta el FE explicito. INI, CNI, DNI
 	
 	public Label(Element label) {
-		this.start = Integer.valueOf(label.getAttribute("start"));
-		this.end = Integer.valueOf(label.getAttribute("end"));
+		if(label.hasAttribute("itype")){
+			this.itype=label.getAttribute("itype");
+		}else{
+			this.start = Integer.valueOf(label.getAttribute("start"));
+			this.end = Integer.valueOf(label.getAttribute("end"));
+		}
 		this.name = label.getAttribute("name");
 	}
 

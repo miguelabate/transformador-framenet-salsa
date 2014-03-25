@@ -20,7 +20,8 @@ public class Oracion {
 		this.texto=((Element)oracion.getElementsByTagName("text").item(0)).getTextContent();
 		NodeList annotationSets = oracion.getElementsByTagName("annotationSet");
 		for(int i=0;i<annotationSets.getLength();i++){
-			this.listaDeFramesAnotados.add(new Frame((Element)annotationSets.item(i)));
+			if(!((Element)annotationSets.item(i)).getAttribute("frameName").isEmpty())//solo me interesan los layers de frames, el otro que es el analisis sintactico, no.
+				this.listaDeFramesAnotados.add(new Frame((Element)annotationSets.item(i)));
 			
 		}
 	}
