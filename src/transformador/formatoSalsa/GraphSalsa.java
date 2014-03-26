@@ -1,4 +1,4 @@
-package transformador;
+package transformador.formatoSalsa;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,6 @@ public class GraphSalsa {
 	
 	public void agregarNodoTerminal(TerminalSalsa t){
 		this.listaNodosTerminales.add(t);
-		this.oracion.actualizarMapa(t);
 	}
 	
 	public void agregarNodoNoTerminal(NoTerminalSalsa nt){

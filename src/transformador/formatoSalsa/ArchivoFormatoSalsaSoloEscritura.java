@@ -1,7 +1,8 @@
-package transformador;
+package transformador.formatoSalsa;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,16 +20,16 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
-public class ArchivoFormatoSalsa {
+public class ArchivoFormatoSalsaSoloEscritura {
 
 	private Document doc;
 	
-	public ArchivoFormatoSalsa() {
+	public ArchivoFormatoSalsaSoloEscritura() {
 		super();
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse(new File("src/transformador/baseArchivoSalsa.xml"));
+			doc = db.parse(new File("src/transformador/formatoSalsa/baseArchivoSalsa.xml"));
 			doc.getDocumentElement().normalize();
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -39,29 +40,6 @@ public class ArchivoFormatoSalsa {
 		}
 	}
 	
-//	public ArchivoFormatoSalsa(Document doc) {
-//		super();
-//		this.doc = doc;
-//	}
-//	
-//	public ArchivoFormatoSalsa(String pathArchivoXML) {
-//		super();
-//		try {
-//			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//			DocumentBuilder db = dbf.newDocumentBuilder();
-//			doc = db.parse(new File(pathArchivoXML));
-//			doc.getDocumentElement().normalize();
-//		} catch (ParserConfigurationException e) {
-//			e.printStackTrace();
-//		} catch (SAXException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-
-
 	public void imprimirArbolXML(){
 		NodeList nodosRaiz = doc.getDocumentElement().getChildNodes();
 		imprimirRecursivo(nodosRaiz);

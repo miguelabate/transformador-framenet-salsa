@@ -1,8 +1,10 @@
-package transformador;
+package transformador.formatoSalsa;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import transformador.ReferenciablePorUnEdgeSalsa;
 
 public class EdgeSalsa {
 	 private ReferenciablePorUnEdgeSalsa referenciableTerminal;//id referencia a un nodo terminal o no terminal

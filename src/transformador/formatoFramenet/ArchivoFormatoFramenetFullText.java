@@ -12,17 +12,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import transformador.ArchivoFormatoSalsa;
-import transformador.EdgeSalsa;
-import transformador.FeNodeSalsa;
-import transformador.FeSalsa;
-import transformador.FrameSalsa;
-import transformador.GraphSalsa;
-import transformador.NoTerminalSalsa;
-import transformador.OracionSalsa;
-import transformador.SemSalsa;
-import transformador.TargetSalsa;
-import transformador.TerminalSalsa;
+import transformador.formatoSalsa.ArchivoFormatoSalsaSoloEscritura;
+import transformador.formatoSalsa.EdgeSalsa;
+import transformador.formatoSalsa.FeNodeSalsa;
+import transformador.formatoSalsa.FeSalsa;
+import transformador.formatoSalsa.FrameSalsa;
+import transformador.formatoSalsa.GraphSalsa;
+import transformador.formatoSalsa.NoTerminalSalsa;
+import transformador.formatoSalsa.OracionSalsa;
+import transformador.formatoSalsa.SemSalsa;
+import transformador.formatoSalsa.TargetSalsa;
+import transformador.formatoSalsa.TerminalSalsa;
 
 
 public class ArchivoFormatoFramenetFullText {

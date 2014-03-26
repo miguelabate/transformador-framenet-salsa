@@ -1,4 +1,4 @@
-package transformador;
+package transformador.formatoSalsa;
 
 import java.util.ArrayList;
 

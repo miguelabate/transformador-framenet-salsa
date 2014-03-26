@@ -1,10 +1,12 @@
-package transformador;
+package transformador.formatoSalsa;
 
 import java.util.ArrayList;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import transformador.ReferenciablePorUnEdgeSalsa;
 
 public class NoTerminalSalsa implements ReferenciablePorUnEdgeSalsa{
 	

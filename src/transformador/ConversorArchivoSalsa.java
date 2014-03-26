@@ -8,6 +8,17 @@ import transformador.formatoFramenet.Frame;
 import transformador.formatoFramenet.Label;
 import transformador.formatoFramenet.Oracion;
 import transformador.formatoFramenet.Utils;
+import transformador.formatoSalsa.ArchivoFormatoSalsaSoloEscritura;
+import transformador.formatoSalsa.EdgeSalsa;
+import transformador.formatoSalsa.FeNodeSalsa;
+import transformador.formatoSalsa.FeSalsa;
+import transformador.formatoSalsa.FrameSalsa;
+import transformador.formatoSalsa.GraphSalsa;
+import transformador.formatoSalsa.NoTerminalSalsa;
+import transformador.formatoSalsa.OracionSalsa;
+import transformador.formatoSalsa.SemSalsa;
+import transformador.formatoSalsa.TargetSalsa;
+import transformador.formatoSalsa.TerminalSalsa;
 
 public class ConversorArchivoSalsa {
 	private ArchivoFormatoFramenet archivoFramenet;
@@ -19,8 +30,8 @@ public class ConversorArchivoSalsa {
 		this.archivoFramenet = archivoFramenet;
 	}
 
-	public ArchivoFormatoSalsa obtenerEnformatoSalsa(){
-		ArchivoFormatoSalsa archivoSalsa2 = new ArchivoFormatoSalsa();
+	public ArchivoFormatoSalsaSoloEscritura obtenerEnformatoSalsa(){
+		ArchivoFormatoSalsaSoloEscritura archivoSalsa2 = new ArchivoFormatoSalsaSoloEscritura();
 		
 		//creo el graphico
 		GraphSalsa graph= new GraphSalsa();
@@ -49,28 +60,6 @@ public class ConversorArchivoSalsa {
 		for(NoTerminalSalsa ntSalsa:this.listaNoTerminales){
 			graph.agregarNodoNoTerminal(ntSalsa);
 		}
-//		NoTerminalSalsa nt=new NoTerminalSalsa(Utils.getNtId(), "", "");
-		//agrego un vertice al no terminal
-//		EdgeSalsa edge = new EdgeSalsa(t, "");
-//		nt.agregarEdge(edge);
-//		graph.agregarNodoNoTerminal(nt);
-		
-		//		FrameSalsa unFrame=new FrameSalsa("Mi_Frame", Utils.getFrameId());
-//		sem.agregarFrame(unFrame);
-//		FeSalsa unFeSalsa = new FeSalsa(Utils.getFeId(), "un_fe");
-//		unFrame.agregarFrameElement(unFeSalsa);
-		//le agrego el nodoref
-//		FeNodeSalsa unFenode =new FeNodeSalsa();
-//		unFenode.setReferencia(nt);
-//		unFeSalsa.setFenode(unFenode);
-		
-		//agrego el target
-//		TargetSalsa target = new TargetSalsa(Utils.getTargetId(), "", "");
-//		unFrame.setTarget(target);
-		//le agrego el nodoref
-//		FeNodeSalsa unFenode2 =new FeNodeSalsa();
-//		unFenode2.setReferencia(t);
-//		target.setFenode(unFenode2);
 		archivoSalsa2.agregarOracion(s);
 		
 		return archivoSalsa2;
