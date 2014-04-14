@@ -65,6 +65,12 @@ public class Oracion {
 		}
 	}
 	
+	/**
+	 * Devuelve los labels correspondientes al rango dado o null
+	 * @param comienzo
+	 * @param fin
+	 * @return
+	 */
 	public List obtenerLabelsEn(int comienzo, int fin){
 		ClaveDeReferenciable clave=new ClaveDeReferenciable(comienzo,fin);
 		return (List) this.tablaReferenciables.get(clave);

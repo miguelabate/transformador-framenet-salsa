@@ -9,13 +9,13 @@ public class Event extends ConsumidorTexto{
 	private EventClassType clase;
 	private String stem;
 	
-	public Event(String sid, EventClassType clase, String contenido, long indice) {
+	public Event(String sid, EventClassType clase, String contenido, Integer indice) {
 		super(contenido, indice);
 		this.eid = sid;
 		this.clase=clase;
 	}
 
-	public Event(Element nodo, long indice) {
+	public Event(Element nodo, Integer indice) {
 		this(nodo.getAttribute("eid"),EventClassType.valueOf(nodo.getAttribute("class")), nodo.getTextContent(), indice);
 		
 		if(nodo.hasAttribute("stem"))this.setStem(nodo.getAttribute("stem"));

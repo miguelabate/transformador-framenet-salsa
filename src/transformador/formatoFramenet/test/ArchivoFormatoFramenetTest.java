@@ -37,9 +37,30 @@ public class ArchivoFormatoFramenetTest {
 		
 		Oracion primerOracion=oraciones.get(0);
 		List<Label> labels=primerOracion.obtenerLabelsEn(0, 4);
-		for(Label unLabel:labels){
-			unLabel.getName();
-			unLabel.getFramePadre().getFrameName();
-		}
+		Assert.assertEquals(1,labels.size());
+		Assert.assertEquals("Target",labels.get(0).getName());
+		Assert.assertEquals("Frequency",labels.get(0).getFramePadre().getFrameName());
+		
+		labels=primerOracion.obtenerLabelsEn(5, 7);
+		Assert.assertEquals(null,labels);
+		
+		labels=primerOracion.obtenerLabelsEn(5, 14);
+		Assert.assertEquals(1,labels.size());
+		Assert.assertEquals("Event",labels.get(0).getName());
+		Assert.assertEquals("Frequency",labels.get(0).getFramePadre().getFrameName());
+		
+		labels=primerOracion.obtenerLabelsEn(8, 14);
+		Assert.assertEquals(2,labels.size());
+		Assert.assertEquals("Building_part",labels.get(0).getName());
+		Assert.assertEquals("Building_subparts",labels.get(0).getFramePadre().getFrameName());
+		Assert.assertEquals("Target",labels.get(1).getName());
+		Assert.assertEquals("Building_subparts",labels.get(1).getFramePadre().getFrameName());
+		
+		labels=primerOracion.obtenerLabelsEn(91, 145);
+		Assert.assertEquals(1,labels.size());
+		Assert.assertEquals("Message",labels.get(0).getName());
+		Assert.assertEquals("Commitment",labels.get(0).getFramePadre().getFrameName());
+		//ahora quiero ver quien es el target
+		Assert.assertEquals("threatened",primerOracion.getTexto().substring(labels.get(0).getFramePadre().getTarget().getStart(),labels.get(0).getFramePadre().getTarget().getEnd()+1));
 	}
 }

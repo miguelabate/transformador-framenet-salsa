@@ -8,10 +8,10 @@ package transformador.formatoTimeML;
 public abstract class ConsumidorTexto {
 
 	protected 	String contenido;
-	protected	long 	start;
-	protected	long 	end;
+	protected	Integer 	start;
+	protected	Integer 	end;
 	
-	public ConsumidorTexto(String contenido, long indice) {
+	public ConsumidorTexto(String contenido, Integer indice) {
 		super();
 		this.contenido = contenido;
 		this.start = indice;
@@ -22,11 +22,11 @@ public abstract class ConsumidorTexto {
 		return contenido;
 	}
 
-	public long getStart() {
+	public Integer getStart() {
 		return start;
 	}
 
-	public long getEnd() {
+	public Integer getEnd() {
 		return end;
 	}
 

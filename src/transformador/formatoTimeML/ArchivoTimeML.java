@@ -3,6 +3,7 @@ package transformador.formatoTimeML;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -15,6 +16,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import transformador.ClaveDeReferenciable;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.process.CoreLabelTokenFactory;
+import edu.stanford.nlp.process.PTBTokenizer;
+
 public class ArchivoTimeML {
 
 	private String textoPlano="";
@@ -25,6 +31,7 @@ public class ArchivoTimeML {
 	private HashMap<String, TLink> tlinkTabla= new HashMap<String, TLink>();
 	private HashMap<String, SLink> slinkTabla= new HashMap<String, SLink>();
 	private HashMap<String, ALink> alinkTabla= new HashMap<String, ALink>();
+	private HashMap<ClaveDeReferenciable, ConsumidorTexto> tablaReferenciables = new HashMap<ClaveDeReferenciable, ConsumidorTexto>();
 	
 	public ArchivoTimeML(String pathArchivo) {
 		cargarDatos(pathArchivo);
@@ -41,7 +48,7 @@ public class ArchivoTimeML {
 				switch(nodoOrigen.getNodeType()){
 					case Node.TEXT_NODE:
 					{
-						textoPlano+=nodoOrigen.getNodeValue();
+						textoPlano+=tokenizar(nodoOrigen.getNodeValue());
 						break;
 					}
 					case Node.ELEMENT_NODE:
@@ -54,7 +61,7 @@ public class ArchivoTimeML {
 						if(tipoElemento.equals("TLINK"))agregarElementoTLink(nodoOrigen);//ok
 						if(tipoElemento.equals("SLINK"))agregarElementoSLink(nodoOrigen);
 						if(tipoElemento.equals("ALINK"))agregarElementoALink(nodoOrigen);
-						textoPlano+=nodoOrigen.getTextContent();
+						textoPlano+=tokenizar(nodoOrigen.getTextContent());
 						break;
 					}
 				}
@@ -68,6 +75,50 @@ public class ArchivoTimeML {
 			e.printStackTrace();
 		}
 		
+	}
+
+	/**
+	 * Metodo que normaliza los textos para que queden como en framenet. "palabra," -> "palabra ,"
+	 * @param textContent
+	 * @return
+	 */
+	public static String tokenizar(String textContent) {
+		String result="";
+		PTBTokenizer ptbt = new PTBTokenizer(new StringReader(textContent.replaceAll("\n","")),
+		          new CoreLabelTokenFactory(), "");
+		  for (CoreLabel label; ptbt.hasNext(); ) {
+		    label = (CoreLabel) ptbt.next();
+//		    System.out.println(label);
+		    result+=label.toString()+" ";
+		  }
+		  
+			if(result.isEmpty())
+			return "";
+		else
+			return result;
+//		ArrayList<String> tokens=SimpleTokenize.tokenize(textContent.replaceAll("\n",""));
+//		String result="";
+//		for(String unToken:tokens){
+//			result+=unToken+" ";
+//		}
+//		if(result.isEmpty())
+//			return "";
+//		else
+//			return result;
+//		return textContent.replaceAll("\n","");
+//				.replaceAll("\""," \"")
+//				.replaceAll("'"," '")
+//				.replaceAll(":"," :")
+//				.replaceAll(";"," ;")
+//				.replaceAll(","," ,")
+//				.replaceAll("\\?"," \\?")
+//				.replaceAll("\\("," \\(")
+//				.replaceAll("\\)"," \\)")
+//				.replaceAll("\\["," \\[")
+//				.replaceAll("\\]"," \\]")
+//				.replaceAll("\\{"," \\{")
+//				.replaceAll("\\}"," \\}")
+//				.replaceAll("\\.$"," \\.");
 	}
 
 	private void agregarElementoALink(Node nodoOrigen) {
@@ -95,18 +146,19 @@ public class ArchivoTimeML {
 	private void agregarElementoSignal(Node nodoOrigen) {
 		Signal signal = new Signal((Element)nodoOrigen,this.textoPlano.length());
 		this.signalTabla.put(signal.getSid(), signal);
-		
+		this.tablaReferenciables.put(new ClaveDeReferenciable(signal.getStart(), signal.getEnd()), signal);
 	}
 
 	private void agregarElementoEvent(Node nodoOrigen) {
 		Event evento = new Event((Element) nodoOrigen,this.textoPlano.length());
 		eventTabla.put(evento.getEid(), evento);
-		
+		this.tablaReferenciables.put(new ClaveDeReferenciable(evento.getStart(), evento.getEnd()), evento);
 	}
 
 	private void agregarElementoTimex3(Node nodoOrigen) {
 		Timex3 timex=new Timex3((Element)nodoOrigen,this.timex3Tabla,this.textoPlano.length());
 		this.timex3Tabla.put(timex.getTid(), timex);
+		this.tablaReferenciables.put(new ClaveDeReferenciable(timex.getStart(), timex.getEnd()), timex);
 		
 	}
 
@@ -147,5 +199,16 @@ public class ArchivoTimeML {
 		out.print(this.textoPlano);
 		out.close();
 		
+	}
+	
+	/**
+	 * Devuelve el consumidor de texto coincidente en ese rango. Puede ser Event, Timex3 o Signal. O null.
+	 * @param comienzo
+	 * @param fin
+	 * @return
+	 */
+	public ConsumidorTexto obtenerConsumidorDeTextoEn(Integer comienzo, Integer fin){
+		ClaveDeReferenciable clave=new ClaveDeReferenciable(comienzo,fin);
+		return this.tablaReferenciables.get(clave);
 	}
 }

@@ -20,7 +20,7 @@ public class ArchivoTimeMLTest {
 	@Test
 	public void levantarArchivoTimeMLTest() {
 		ArchivoTimeML archTimeMl = new ArchivoTimeML("src/transformador/formatoTimeML/test/ABC19980108.1830.0711.tml");
-		Assert.assertEquals(textoEsperadoPlano, archTimeMl.getTextoPlano());
+		Assert.assertEquals(ArchivoTimeML.tokenizar(textoEsperadoPlano), archTimeMl.getTextoPlano());
 		chequeosTimex3(archTimeMl);
 		chequeosSignal(archTimeMl);//
 		chequeosEvent(archTimeMl);
@@ -72,5 +72,50 @@ public class ArchivoTimeMLTest {
 		Timex3 timexQueReferenciaAotro=archTimeMl.getTimex3Tabla().get("t196");
 		Assert.assertEquals("t82",timexQueReferenciaAotro.getAnchorTimeID().getTid());
 	}
-
+	@Test
+	public void reemplazarPuntuacionTest() {
+		Assert.assertEquals("hola , " , ArchivoTimeML.tokenizar("hola, "));
+		Assert.assertEquals("hola ." , ArchivoTimeML.tokenizar("hola."));
+		Assert.assertEquals("Perez S.A. es una empresa ." , ArchivoTimeML.tokenizar("Perez S.A. es una empresa."));
+		Assert.assertEquals("hola : " , ArchivoTimeML.tokenizar("hola: "));
+		Assert.assertEquals("hola ; " , ArchivoTimeML.tokenizar("hola; "));
+		Assert.assertEquals("hola ' " , ArchivoTimeML.tokenizar("hola' "));
+		Assert.assertEquals("hola \" " , ArchivoTimeML.tokenizar("hola\" "));
+	}
+	
+	@Test
+	public void limitesConsumidoresTextoTest(){
+		ArchivoTimeML archTimeMl = new ArchivoTimeML("src/transformador/formatoTimeML/test/ABC19980108.1830.0711.tml");
+		String archivoProcesadoConEspaciosParaComparar = ArchivoTimeML.tokenizar(textoEsperadoPlano);
+		Event event = archTimeMl.getEventTabla().get("e53");
+		Assert.assertEquals("talking",archivoProcesadoConEspaciosParaComparar.substring(event.getStart(), event.getEnd()));
+		event = archTimeMl.getEventTabla().get("e34");
+		Assert.assertEquals("find",archivoProcesadoConEspaciosParaComparar.substring(event.getStart(), event.getEnd()));
+		event = archTimeMl.getEventTabla().get("e371");
+		Assert.assertEquals("thirty",archivoProcesadoConEspaciosParaComparar.substring(event.getStart(), event.getEnd()));
+		event = archTimeMl.getEventTabla().get("e368");
+		Assert.assertEquals("recession",archivoProcesadoConEspaciosParaComparar.substring(event.getStart(), event.getEnd()));
+		
+		Timex3 timex= archTimeMl.getTimex3Tabla().get("t98");
+		Assert.assertEquals("the past three months ",archivoProcesadoConEspaciosParaComparar.substring(timex.getStart(), timex.getEnd()));
+		timex= archTimeMl.getTimex3Tabla().get("t196");
+		Assert.assertEquals("Now",archivoProcesadoConEspaciosParaComparar.substring(timex.getStart(), timex.getEnd()));
+		timex= archTimeMl.getTimex3Tabla().get("t90");
+		Assert.assertEquals("now",archivoProcesadoConEspaciosParaComparar.substring(timex.getStart(), timex.getEnd()));
+		timex= archTimeMl.getTimex3Tabla().get("t87");
+		Assert.assertEquals("four year",archivoProcesadoConEspaciosParaComparar.substring(timex.getStart(), timex.getEnd()));
+		timex= archTimeMl.getTimex3Tabla().get("t85");
+		Assert.assertEquals("the last twenty four hours",archivoProcesadoConEspaciosParaComparar.substring(timex.getStart(), timex.getEnd()));
+		
+		Signal signal=archTimeMl.getSignalTabla().get("s13");
+		Assert.assertEquals("before",archivoProcesadoConEspaciosParaComparar.substring(signal.getStart(), signal.getEnd()));
+		signal=archTimeMl.getSignalTabla().get("s15");
+		Assert.assertEquals("when",archivoProcesadoConEspaciosParaComparar.substring(signal.getStart(), signal.getEnd()));
+		signal=archTimeMl.getSignalTabla().get("s306");
+		Assert.assertEquals("after",archivoProcesadoConEspaciosParaComparar.substring(signal.getStart(), signal.getEnd()));
+		signal=archTimeMl.getSignalTabla().get("s15");
+		Assert.assertEquals("when",archivoProcesadoConEspaciosParaComparar.substring(signal.getStart(), signal.getEnd()));
+		
+		
+	}
 }

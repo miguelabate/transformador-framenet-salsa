@@ -20,14 +20,14 @@ public class Timex3 extends ConsumidorTexto implements ReferenciablePorLink{
 	private String quant;//aparecen en el caso de type SET
 	private String freq;//aparecen en el caso de type SET
 	
-	public Timex3(String tid, Timex3Type type, String value, String contenido, long indice) {
+	public Timex3(String tid, Timex3Type type, String value, String contenido, Integer indice) {
 		super(contenido,indice);
 		this.tid = tid;
 		this.type = type;
 		this.value = value;
 	}
 
-	public Timex3(Element nodo, HashMap<String, Timex3> timex3Tabla, long indice) {
+	public Timex3(Element nodo, HashMap<String, Timex3> timex3Tabla, Integer indice) {
 		this(nodo.getAttribute("tid"), Timex3Type.valueOf(nodo.getAttribute("type")),nodo.getAttribute("value"),nodo.getTextContent(),indice);
 		
 		if(nodo.hasAttribute("mod"))this.setMod(nodo.getAttribute("mod"));
