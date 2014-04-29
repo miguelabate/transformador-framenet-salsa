@@ -215,6 +215,27 @@ public class DefinicionFramenet {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public Collection<DefinicionFrame> getFramesPadres(final String nombreFrameHijo){
+		return CollectionUtils.collect(
+		CollectionUtils.select(this.tableFrameRelation.values(), new Predicate() {
+			
+			@Override
+			public boolean evaluate(final Object arg0) {
+				final DefinicionFrameRelation frameRel = (DefinicionFrameRelation) arg0;
+				return frameRel.getType().getName().equals("Inheritance")&&frameRel.getSubFrame().getName().equals(nombreFrameHijo);
+			}
+		}),
+		new Transformer() {
+			
+			@Override
+			public Object transform(final Object arg0) {
+				final DefinicionFrameRelation frameRel= (DefinicionFrameRelation) arg0;
+				return frameRel.getSuperFrame();
+			}
+		});
+	}
+	
+	@SuppressWarnings("unchecked")
 	public Collection<DefinicionFrameRelation> getRelacionesPrecedes(){
 		return	CollectionUtils.select(this.tableFrameRelation.values(), new Predicate() {
 			

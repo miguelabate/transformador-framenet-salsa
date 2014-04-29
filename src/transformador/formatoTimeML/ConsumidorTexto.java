@@ -30,5 +30,13 @@ public abstract class ConsumidorTexto {
 		return end;
 	}
 
+	public void setStart(Integer start) {
+		this.start = start;
+	}
+
+	public void setEnd(Integer end) {
+		this.end = end;
+	}
+
 
 }

@@ -46,7 +46,7 @@ public class PrincipalConversorTimeMLExtraTextoPlano {
 					NodeList sentence = doc.getElementsByTagName("s");
 					StringBuilder resultado=new StringBuilder();
 					for(int i=0;i<sentence.getLength();i++){
-						resultado.append(((Element)sentence.item(i)).getTextContent().replaceAll("\n", ""));
+						resultado.append(((Element)sentence.item(i)).getTextContent().replaceAll("\n", " "));//ver aca
 						resultado.append("\n");
 					}
 					PrintWriter out = new PrintWriter(outputDir+archivoTimeML.getName()+".txt");

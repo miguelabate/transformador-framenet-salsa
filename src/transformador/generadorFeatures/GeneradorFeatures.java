@@ -1,8 +1,13 @@
 package transformador.generadorFeatures;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
 
+import transformador.formatoDefinicionFrame.DefinicionFrame;
+import transformador.formatoDefinicionFrame.DefinicionFramenet;
 import transformador.formatoFramenet.ArchivoFormatoFramenet;
 import transformador.formatoFramenet.Documento;
 import transformador.formatoFramenet.Frame;
@@ -17,15 +22,29 @@ public class GeneradorFeatures {
 
 	private ArchivoTimeML archivoTimeML;//archivo timeml que mria ucando quiere sacar el atributo clase, entrenaimiento
 	private ArchivoFormatoFramenet archivoFramenet;//archivo framenet de donde 
+	private DefinicionFramenet defFramenet;
+	private String pathArchivoSalida;
 	
 	public GeneradorFeatures(ArchivoTimeML archivoTimeML,
-			ArchivoFormatoFramenet archivoFramenet) {
+			ArchivoFormatoFramenet archivoFramenet,DefinicionFramenet defFramenet) throws ArchivosInconsistentesGeneradorFeaturesException {
 		super();
 		this.archivoTimeML = archivoTimeML;
 		this.archivoFramenet = archivoFramenet;
+		this.defFramenet=defFramenet;
+		if(!isArchivosConsistentes()) throw new ArchivosInconsistentesGeneradorFeaturesException();
 	}
 	
-	public void generarFeatures(){
+	public GeneradorFeatures(ArchivoTimeML archivoTimeML2,
+			ArchivoFormatoFramenet archFrameNet,
+			DefinicionFramenet defFramenet2, String pathArchivoSalida) throws ArchivosInconsistentesGeneradorFeaturesException {
+		this(archivoTimeML2,archFrameNet,defFramenet2);
+		this.pathArchivoSalida=pathArchivoSalida;
+	}
+
+	public void generarFeatures() throws IOException{
+		FileWriter out = null;
+		if(pathArchivoSalida!=null)out= new FileWriter(pathArchivoSalida,true);
+		
 		Integer indiceAbsolutoFramenet=0;//indice que se usa para hacer coincidir la oracion de framenet con el texto de timeml
 		//voy oracion por oracion
 		for(Documento doc:archivoFramenet.getListaDocumentos()){
@@ -33,41 +52,58 @@ public class GeneradorFeatures {
 				for(Oracion oracion:parrafo.getListaOraciones()){
 					indiceAbsolutoFramenet=obtenerIndiceDeOracionAbsoluto(oracion.getTexto());
 					for(Frame unFrame:oracion.getListaDeFramesAnotados()){
-						String resultt="FE: ";
-						resultt+=unFrame.getTarget().getName();//es el target
-						resultt+=" Frame: "+unFrame.getFrameName();
-						resultt+=" Texto:"+archivoTimeML.getTextoPlano().substring(indiceAbsolutoFramenet+unFrame.getTarget().getStart(), indiceAbsolutoFramenet+unFrame.getTarget().getEnd()+1);
-						
-						ConsumidorTexto consumidorTimemlt=archivoTimeML.obtenerConsumidorDeTextoEn(indiceAbsolutoFramenet+unFrame.getTarget().getStart(), indiceAbsolutoFramenet+unFrame.getTarget().getEnd()+1);
-						if((consumidorTimemlt!=null)&&(consumidorTimemlt instanceof Event))
-							{
-							resultt+=" "+((Event)archivoTimeML.obtenerConsumidorDeTextoEn(indiceAbsolutoFramenet+unFrame.getTarget().getStart(), indiceAbsolutoFramenet+unFrame.getTarget().getEnd()+1)).getClase().toString();
-							System.out.println(resultt);
-							}
-						else
-							resultt+=" NADA";
-//						System.out.println(resultt);
+						String featuresGenerados=this.generarSetDeFeatures(unFrame,unFrame.getTarget(),indiceAbsolutoFramenet);
+						guardarLineaSalida(featuresGenerados,out);
 						for(Label unLabel:unFrame.getListaFE()){
-							String result="FE: ";
-							result+=unLabel.getName();
-							result+=" Frame: "+unLabel.getFramePadre().getFrameName();
-							result+=" Texto:"+archivoTimeML.getTextoPlano().substring(indiceAbsolutoFramenet+unLabel.getStart(), indiceAbsolutoFramenet+unLabel.getEnd()+1);
-							
-							ConsumidorTexto consumidorTimeml=archivoTimeML.obtenerConsumidorDeTextoEn(indiceAbsolutoFramenet+unLabel.getStart(), indiceAbsolutoFramenet+unLabel.getEnd()+1);
-							if((consumidorTimeml!=null)&&(consumidorTimeml instanceof Event))
-								{
-								result+=" "+((Event)archivoTimeML.obtenerConsumidorDeTextoEn(indiceAbsolutoFramenet+unLabel.getStart(), indiceAbsolutoFramenet+unLabel.getEnd()+1)).getClase().toString();
-								System.out.println(result);
-								}
-							else
-								result+=" NADA";
-//							System.out.println(result);
+							guardarLineaSalida(this.generarSetDeFeatures(unFrame,unLabel,indiceAbsolutoFramenet),out);
 						}
 					}
-//					indiceAbsolutoFramenet+=oracion.getTexto().length();
 				}
 			}
 		}
+		
+		if(pathArchivoSalida!=null)out.close();
+	}
+
+	private String generarSetDeFeatures(Frame unFrame, Label label,
+			Integer indiceAbsolutoFramenet) {
+		String resultt="";
+		resultt+=label.getName();//tipo de frame element
+		resultt+="\t"+unFrame.getFrameName();//nombre del frame al que pertenece
+		//frame padre
+		Iterator<DefinicionFrame> it=this.defFramenet.getFramesPadres(unFrame.getFrameName()).iterator();
+		if(it.hasNext()){
+			DefinicionFrame fPadre=it.next();
+			resultt+="\t"+fPadre.getName();
+			Iterator<DefinicionFrame> it2=this.defFramenet.getFramesPadres(fPadre.getName()).iterator();
+			if(it2.hasNext()){
+				DefinicionFrame fPadre2=it2.next();
+				resultt+="\t"+fPadre2.getName();
+			}
+			else resultt+="\tNO_PADRE";
+		}
+		else resultt+="\tNO_PADRE\tNO_PADRE";
+
+		//texto al que hace referencia
+		resultt+="\t"+archivoTimeML.getTextoPlano().substring(indiceAbsolutoFramenet+label.getStart(), indiceAbsolutoFramenet+label.getEnd()+1);
+	
+		ConsumidorTexto consumidorTimemlt=archivoTimeML.obtenerConsumidorDeTextoEn(indiceAbsolutoFramenet+label.getStart(), indiceAbsolutoFramenet+label.getEnd()+1);
+		if((consumidorTimemlt!=null)&&(consumidorTimemlt instanceof Event))//Es un EVENT
+			{
+			resultt+="\tEVENT";
+			Event evento=((Event)archivoTimeML.obtenerConsumidorDeTextoEn(indiceAbsolutoFramenet+label.getStart(), indiceAbsolutoFramenet+label.getEnd()+1));
+			resultt+="\t"+evento.getClase().toString();
+			resultt+="\t"+evento.getEid();
+		
+			}
+		else
+			{//NO ES un EVENT
+			resultt+="\tNO_EVENT";
+			resultt+="\tNO_CLASE_EVENT";
+			resultt+="\tNO_EVENT_ID";
+			}
+		
+		return resultt;
 	}
 
 	/**
@@ -76,10 +112,6 @@ public class GeneradorFeatures {
 	 * @return
 	 */
 	private int obtenerIndiceDeOracionAbsoluto(String oracion) {
-//		 Pattern pattern =    Pattern.compile(oracion.replaceAll(",","\\.{0,1}").replaceAll("\\s","\\.{0,1}"));
-//		 Matcher matcher =         pattern.matcher(archivoTimeML.getTextoPlano());
-//		 if(matcher.find())return matcher.start();
-//		 else return -1;
 		return archivoTimeML.getTextoPlano().indexOf(oracion);///le saco el punto del final
 	}
 	
@@ -92,7 +124,11 @@ public class GeneradorFeatures {
 		for(Documento doc:archivoFramenet.getListaDocumentos()){
 			for(Parrafo parrafo:doc.getListaParrafos()){
 				for(Oracion oracion:parrafo.getListaOraciones()){
-					if(obtenerIndiceDeOracionAbsoluto(oracion.getTexto())==-1)return false;
+					if(obtenerIndiceDeOracionAbsoluto(oracion.getTexto())==-1){
+						System.out.println("Oracion: "+oracion.getTexto());
+						System.out.println(archivoTimeML.getTextoPlano());
+						return false;
+					}
 				}
 			}
 		}
@@ -101,4 +137,10 @@ public class GeneradorFeatures {
 		
 	}
 
+	public void guardarLineaSalida(String linea,FileWriter out) throws IOException{
+		if(out==null)System.out.println(linea);
+		else{
+			out.write(linea+"\n");
+		}
+	}
 }
