@@ -12,8 +12,10 @@ import transformador.formatoTimeML.ArchivoTimeML;
 import transformador.generadorFeatures.ArchivosInconsistentesGeneradorFeaturesException;
 import transformador.generadorFeatures.GeneradorFeatures;
 import transformador.generadorFeatures.GeneradorFeaturesCRF;
+import transformador.generadorFeatures.GeneradorFeaturesCRFPorPalabra;
+import transformador.generadorFeatures.GeneradorFeaturesPorPalabra;
 
-public class PrincipalGeneradorFeatures {
+public class PrincipalGeneradorFeaturesPorPalabra {
 
 	public static void main(String[] args) throws IOException {
 		File dirArchivosTimeML=new File(args[1]);
@@ -30,7 +32,7 @@ public class PrincipalGeneradorFeatures {
 		for(File archivoTimeML:dirArchivosTimeML.listFiles()){
 			ArchivoFormatoFramenet archFrameNet = new ArchivoFormatoFramenet(archivosFramenet.get(archivoTimeML.getName()));
 			try {
-				GeneradorFeatures gf=new GeneradorFeaturesCRF(new ArchivoTimeML(archivoTimeML.getAbsolutePath()), archFrameNet,defFramenet,pathArchivoSalida);
+				GeneradorFeaturesPorPalabra gf=new GeneradorFeaturesCRFPorPalabra(new ArchivoTimeML(archivoTimeML.getAbsolutePath()), archFrameNet,defFramenet,pathArchivoSalida);
 				gf.generarFeatures();
 //				System.out.println("Todo OK");
 				totalEventosFramenet+=gf.getEventosDetectadosFramenet();

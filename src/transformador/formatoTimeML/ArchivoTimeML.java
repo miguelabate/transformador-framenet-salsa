@@ -5,12 +5,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.collections.Closure;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -90,22 +94,72 @@ public class ArchivoTimeML {
 
 	@SuppressWarnings("unchecked")
 	public static String tokenizarCorrigiendoIndex(String textContent, ArrayList<ConsumidorTexto> listaConsumidores2) {
+//		String result="";
+//		ArrayList<ConsumidorTexto> resultadoConsumidoresMod=new ArrayList<ConsumidorTexto>();
+//		PTBTokenizer ptbt = new PTBTokenizer(new StringReader(textContent),
+//		          new CoreLabelTokenFactory(), "");
+//		  for (CoreLabel label; ptbt.hasNext(); ) {
+//		    label = (CoreLabel) ptbt.next();
+//		    actualizarIndices(label,listaConsumidores2,resultadoConsumidoresMod,result.length());
+//		    result+=label.toString()+" ";
+//		  }
+//		  System.out.println("En la tokinazion/reindexacion se perdieron: "+listaConsumidores2.size()+" elementos timeML");
+//		  listaConsumidores2.clear();
+//		  listaConsumidores2.addAll(resultadoConsumidoresMod);//ver porque quedan algunos sin modificar
+//		  return result;
 		String result="";
-		ArrayList<ConsumidorTexto> resultadoConsumidoresMod=new ArrayList<ConsumidorTexto>();
+		final ArrayList<CoreLabel> corelabels=new ArrayList<CoreLabel>();
 		PTBTokenizer ptbt = new PTBTokenizer(new StringReader(textContent),
+		        new CoreLabelTokenFactory(), "");
+		for (CoreLabel label; ptbt.hasNext(); ) {
+		  label = (CoreLabel) ptbt.next();
+		  corelabels.add(label);
+		}
+		
+		CollectionUtils.forAllDo(listaConsumidores2, new Closure() {
+			
+			@Override
+			public void execute(Object arg0) {
+				ConsumidorTexto consum= (ConsumidorTexto)arg0;
+				final int start=consum.getStart().intValue();
+				final int end=consum.getEnd().intValue();
+				Collection<CoreLabel>  coresIncluidos=CollectionUtils.select(corelabels, new Predicate() {
+					
+					@Override
+					public boolean evaluate(Object arg0) {
+						return start<=((CoreLabel)arg0).beginPosition()&&
+								end>=((CoreLabel)arg0).endPosition();
+					}
+				});
+				//mdoifico internamente al cosnumidor de texto
+				String contenidoMod="";
+				for(CoreLabel unCore:coresIncluidos){
+					contenidoMod+=unCore.toString()+" ";
+				}
+				if(!contenidoMod.isEmpty()){
+					consum.setContenido(contenidoMod.substring(0,contenidoMod.length()-1));
+					consum.setEnd(consum.getStart()+consum.getContenido().length());
+				}
+			}
+		});
+			
+		
+		//el global
+		ArrayList<ConsumidorTexto> resultadoConsumidoresMod=new ArrayList<ConsumidorTexto>();
+		PTBTokenizer ptbt2 = new PTBTokenizer(new StringReader(textContent),
 		          new CoreLabelTokenFactory(), "");
-		  for (CoreLabel label; ptbt.hasNext(); ) {
-		    label = (CoreLabel) ptbt.next();
+		  for (CoreLabel label; ptbt2.hasNext(); ) {
+		    label = (CoreLabel) ptbt2.next();
 		    actualizarIndices(label,listaConsumidores2,resultadoConsumidoresMod,result.length());
 		    result+=label.toString()+" ";
 		  }
-//		  System.out.println("En la tokinazion/reindexacion se perdieron: "+listaConsumidores2.size()+" elementos timeML");
+		  System.out.println("En la tokinazion/reindexacion se perdieron: "+listaConsumidores2.size()+" elementos timeML");
 		  listaConsumidores2.clear();
 		  listaConsumidores2.addAll(resultadoConsumidoresMod);//ver porque quedan algunos sin modificar
 		  return result;
 	}
 	
-	private static void actualizarIndices(CoreLabel label, ArrayList<ConsumidorTexto> listaConsumidores2,ArrayList<ConsumidorTexto> resultadoConsumidoresMod,Integer indiceActual) {
+	private static void actualizarIndices(final CoreLabel label, ArrayList<ConsumidorTexto> listaConsumidores2,ArrayList<ConsumidorTexto> resultadoConsumidoresMod,Integer indiceActual) {
 		Integer offset=-1;
 		for(ConsumidorTexto unConsumidor:listaConsumidores2){
 			if(unConsumidor.getStart().intValue()==label.beginPosition()){
@@ -114,6 +168,7 @@ public class ArchivoTimeML {
 				unConsumidor.setEnd(unConsumidor.getEnd()+offset);
 				resultadoConsumidoresMod.add(unConsumidor);
 			}
+			
 		}
 		listaConsumidores2.removeAll(resultadoConsumidoresMod);
 		
@@ -124,23 +179,23 @@ public class ArchivoTimeML {
 	 * @param textContent
 	 * @return
 	 */
-	public static String tokenizar(String textContent) {
-		String result="";
-		boolean espacioAlFinal=false,espacioAlPrincipio=false;
-//		if(!textContent.isEmpty()){
-//			espacioAlFinal=textContent.substring(textContent.length()-1).equals(" ");
-//			espacioAlPrincipio= textContent.substring(0,1).equals(" ");
-//		}
-		PTBTokenizer ptbt = new PTBTokenizer(new StringReader(textContent),
-		          new CoreLabelTokenFactory(), "");
-		  for (CoreLabel label; ptbt.hasNext(); ) {
-		    label = (CoreLabel) ptbt.next();
-//		    System.out.println(label);
-		    result+=label.toString()+" ";
-		  }
-		  return result;
-			
-	}
+//	public static String tokenizar(String textContent) {
+//		String result="";
+//		boolean espacioAlFinal=false,espacioAlPrincipio=false;
+////		if(!textContent.isEmpty()){
+////			espacioAlFinal=textContent.substring(textContent.length()-1).equals(" ");
+////			espacioAlPrincipio= textContent.substring(0,1).equals(" ");
+////		}
+//		PTBTokenizer ptbt = new PTBTokenizer(new StringReader(textContent),
+//		          new CoreLabelTokenFactory(), "");
+//		  for (CoreLabel label; ptbt.hasNext(); ) {
+//		    label = (CoreLabel) ptbt.next();
+////		    System.out.println(label);
+//		    result+=label.toString()+" ";
+//		  }
+//		  return result;
+//			
+//	}
 
 	private void agregarElementoALink(Node nodoOrigen) {
 		ALink alink = new ALink((Element)nodoOrigen, this.makeinstanceTabla, this.signalTabla);
@@ -240,5 +295,24 @@ public class ArchivoTimeML {
 	public ConsumidorTexto obtenerConsumidorDeTextoEn(Integer comienzo, Integer fin){
 		ClaveDeReferenciable clave=new ClaveDeReferenciable(comienzo,fin);
 		return this.tablaReferenciables.get(clave);
+	}
+	
+	/**
+	 * Devuelve el consumidor de texto que tocan este rango, aunque sea parcial. Puede ser Event, Timex3 o Signal. O null.
+	 * @param comienzo
+	 * @param fin
+	 * @return
+	 */
+	public ConsumidorTexto obtenerConsumidorDeTextoFlexibleEn(Integer comienzo, Integer fin){
+		final ClaveDeReferenciable clave=new ClaveDeReferenciable(comienzo,fin);
+		ClaveDeReferenciable referenciableEncontrado= (ClaveDeReferenciable) CollectionUtils.find(this.tablaReferenciables.keySet(), new Predicate() {
+			
+			@Override
+			public boolean evaluate(Object arg0) {
+				return clave.estaIncluidoEn((ClaveDeReferenciable) arg0);
+			}
+		});
+		
+		return this.tablaReferenciables.get(referenciableEncontrado);
 	}
 }

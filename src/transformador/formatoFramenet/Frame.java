@@ -10,10 +10,12 @@ public class Frame {
 	String 				frameName;
 	Label				target;
 	ArrayList<Label> 	listaFE = new ArrayList<Label>();
+	Oracion				oracionALaQuePertenece;
 	
-	public Frame(Element annotationSet) {
+	public Frame(Element annotationSet, Oracion oracion) {
 		NodeList layers = annotationSet.getElementsByTagName("layer");
 		frameName=annotationSet.getAttribute("frameName");
+		oracionALaQuePertenece=oracion;
 		
 		for(int i=0;i<layers.getLength();i++){
 			Element layer = (Element)layers.item(i);
@@ -36,6 +38,10 @@ public class Frame {
 
 	public ArrayList<Label> getListaFE() {
 		return listaFE;
+	}
+
+	public Oracion getOracionALaQuePertenece() {
+		return oracionALaQuePertenece;
 	}
 
 	

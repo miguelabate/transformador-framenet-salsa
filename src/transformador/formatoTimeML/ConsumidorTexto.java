@@ -38,5 +38,9 @@ public abstract class ConsumidorTexto {
 		this.end = end;
 	}
 
+	public void setContenido(String contenido) {
+		this.contenido = contenido;
+	}
+
 
 }

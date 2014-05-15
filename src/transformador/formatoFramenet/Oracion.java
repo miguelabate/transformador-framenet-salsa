@@ -1,6 +1,7 @@
 package transformador.formatoFramenet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -33,7 +34,7 @@ public class Oracion {
 		NodeList annotationSets = oracion.getElementsByTagName("annotationSet");
 		for(int i=0;i<annotationSets.getLength();i++){
 			if(!((Element)annotationSets.item(i)).getAttribute("frameName").isEmpty())//solo me interesan los layers de frames, el otro que es el analisis sintactico, no.
-				this.listaDeFramesAnotados.add(new Frame((Element)annotationSets.item(i)));
+				this.listaDeFramesAnotados.add(new Frame((Element)annotationSets.item(i),this));
 			
 		}
 		
@@ -74,5 +75,9 @@ public class Oracion {
 	public List obtenerLabelsEn(int comienzo, int fin){
 		ClaveDeReferenciable clave=new ClaveDeReferenciable(comienzo,fin);
 		return (List) this.tablaReferenciables.get(clave);
+	}
+	
+	public MultiHashMap getTablaReferenciables(){
+		return this.tablaReferenciables;
 	}
 }
