@@ -1,6 +1,6 @@
-package transformador;
+package transformador.common;
 
-public class ClaveDeReferenciable {
+public class ClaveDeReferenciable implements Comparable<ClaveDeReferenciable>{
 
 	private Integer start;
 	private Integer end;
@@ -66,6 +66,17 @@ public class ClaveDeReferenciable {
 		} else if (!start.equals(other.start))
 			return false;
 		return true;
+	}
+
+	/**
+	 * Ordena por el indice de inicio
+	 */
+	@Override
+	public int compareTo(ClaveDeReferenciable o) {
+		if(this.start<o.start)return -1;
+		else if(this.start>o.start)return 1;
+		else
+		return 0;
 	}
 	
 }

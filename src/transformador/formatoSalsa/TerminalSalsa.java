@@ -4,7 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import transformador.ReferenciablePorUnEdgeSalsa;
+import transformador.conversorASalsa.ReferenciablePorUnEdgeSalsa;
 
 public class TerminalSalsa implements ReferenciablePorUnEdgeSalsa{
 

@@ -10,8 +10,8 @@ import transformador.formatoDefinicionFrame.DefinicionFramenet;
 import transformador.formatoFramenet.ArchivoFormatoFramenet;
 import transformador.formatoTimeML.ArchivoTimeML;
 import transformador.generadorFeatures.ArchivosInconsistentesGeneradorFeaturesException;
-import transformador.generadorFeatures.GeneradorFeatures;
-import transformador.generadorFeatures.GeneradorFeaturesCRF;
+import transformador.generadorFeatures.events.GeneradorFeatures;
+import transformador.generadorFeatures.events.GeneradorFeaturesCRF;
 
 public class PrincipalGeneradorFeatures {
 

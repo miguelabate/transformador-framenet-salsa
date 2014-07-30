@@ -1,7 +1,7 @@
 package transformador.app;
 import javax.xml.transform.TransformerException;
 
-import transformador.ConversorArchivoSalsa;
+import transformador.conversorASalsa.ConversorArchivoSalsa;
 import transformador.formatoFramenet.ArchivoFormatoFramenet;
 import transformador.formatoFramenet.Utils;
 

@@ -112,4 +112,43 @@ public class MakeInstance implements ReferenciablePorLink {
 	public void setCardinality(String cardinality) {
 		this.cardinality = cardinality;
 	}
+
+	/**
+	 * en el caso del makeinstance tomamos que es igual si es que referncian almismo evento
+	 */
+	@Override
+	public Boolean esIgualA(ReferenciablePorLink otroReferenciable) {
+		if(otroReferenciable instanceof MakeInstance){
+			return ((MakeInstance)otroReferenciable).getEventID().getEid().equals(this.getEventID().getEid());
+		}
+		else 
+			return false;//ni es de la misma clase, son diferentes
+	}
+
+	@Override
+	public String toString() {
+		return "MakeInstance [eiid=" + eiid + "]";
+	}
+	
+	/**
+	 * Si es positivo es que el otroREfernciable estta mas adelante
+	 */
+	@Override
+	public Integer distanciaA(ReferenciablePorLink otroReferenciable) {
+		if(otroReferenciable instanceof Timex3){
+			return ((Timex3)otroReferenciable).getStart()-this.getEventID().getStart();
+		}
+		if(otroReferenciable instanceof MakeInstance){
+			return ((MakeInstance)otroReferenciable).getEventID().getStart()-this.getEventID().getStart();
+		}
+		if(otroReferenciable instanceof Signal){
+			return ((Signal)otroReferenciable).getStart()-this.getEventID().getStart();
+		}
+		return null;
+	}
+	
+	@Override
+	public Integer getStart() {
+		return this.eventID.getStart();
+	}
 }

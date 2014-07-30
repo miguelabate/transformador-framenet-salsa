@@ -1,4 +1,4 @@
-package transformador.generadorFeatures;
+package transformador.generadorFeatures.events;
 
 import java.util.Iterator;
 
@@ -10,6 +10,7 @@ import transformador.formatoFramenet.Label;
 import transformador.formatoTimeML.ArchivoTimeML;
 import transformador.formatoTimeML.ConsumidorTexto;
 import transformador.formatoTimeML.Event;
+import transformador.generadorFeatures.ArchivosInconsistentesGeneradorFeaturesException;
 
 public class GeneradorFeaturesCRF extends GeneradorFeatures{
 

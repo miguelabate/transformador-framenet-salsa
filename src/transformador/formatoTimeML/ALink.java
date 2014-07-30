@@ -5,10 +5,10 @@ import java.util.HashMap;
 import org.w3c.dom.Element;
 
 import transformador.formatoTimeML.types.ALinkType;
+import transformador.formatoTimeML.types.LinkType;
 
-public class ALink {
+public class ALink extends Link{
 
-	private String lid;
 	private MakeInstance eventInstanceID;//eventInstanceID
 	private MakeInstance relatedToEventInstanceID;//relatedToEventInstanceID
 	private ALinkType relType;
@@ -18,15 +18,14 @@ public class ALink {
 
 	public ALink(String lid, MakeInstance eventInstanceID,
 			MakeInstance relatedToEventInstanceID, ALinkType relType) {
-		super();
-		this.lid = lid;
+		super(lid);
 		this.eventInstanceID = eventInstanceID;
 		this.relatedToEventInstanceID = relatedToEventInstanceID;
 		this.relType = relType;
 	}
 	
 	public ALink(Element nodo,HashMap<String, MakeInstance> eventosMITable,HashMap<String, Signal> signalTable){
-		this(nodo.getAttribute("lid"),eventosMITable.get(nodo.getAttribute("eventInstanceID")),eventosMITable.get(nodo.getAttribute("relatedToEventInstanceID")),ALinkType.valueOf(nodo.getAttribute("relType")));
+		this(nodo.getAttribute("lid"),eventosMITable.get(nodo.getAttribute("eventInstanceID")),eventosMITable.get(nodo.getAttribute("relatedToEventInstance")),ALinkType.valueOf(nodo.getAttribute("relType")));
 		if(nodo.hasAttribute("syntax"))this.setSyntax(nodo.getAttribute("syntax"));
 		if(nodo.hasAttribute("signalID"))this.setSignalID(signalTable.get(nodo.getAttribute("signalID")));
 	}
@@ -61,5 +60,10 @@ public class ALink {
 
 	public MakeInstance getRelatedToEventInstanceID() {
 		return relatedToEventInstanceID;
+	}
+
+	@Override
+	public LinkType obtenerTipoDeLink() {
+		return LinkType.ALINK;
 	}
 }

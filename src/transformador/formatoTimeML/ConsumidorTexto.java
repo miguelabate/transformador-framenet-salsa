@@ -42,5 +42,14 @@ public abstract class ConsumidorTexto {
 		this.contenido = contenido;
 	}
 
+	public abstract TipoConsumidorTexto getTipoConsumidorTexto();
 
+	/**
+	 * Agrega el tag timeml de incio o fin segun corresponda al stringbuilder
+	 * @param resultado
+	 * @param indiceTexto
+	 * @param consumidorEncontrado
+	 */
+	public abstract void generarTagTimeML(StringBuilder resultado, int indiceTexto, char caracterEnIndice,
+			ConsumidorTexto consumidorEncontrado);
 }

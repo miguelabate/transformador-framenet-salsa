@@ -1,8 +1,9 @@
-package transformador;
+package transformador.conversorASalsa;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import transformador.common.ClaveDeReferenciable;
 import transformador.formatoFramenet.ArchivoFormatoFramenet;
 import transformador.formatoFramenet.Frame;
 import transformador.formatoFramenet.Label;

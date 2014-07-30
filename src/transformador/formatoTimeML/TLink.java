@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 import org.w3c.dom.Element;
 
+import transformador.formatoTimeML.types.LinkType;
 import transformador.formatoTimeML.types.TLinkType;
 
-public class TLink {
+public class TLink extends Link{
 
-	private String lid;
 	private ReferenciablePorLink referenciaEventTime;//eventInstanceID o timeID
 	private ReferenciablePorLink relatedEventTime;//relatedToEventInstance o relatedToTime
 	private TLinkType relType;
@@ -19,8 +19,7 @@ public class TLink {
 
 	public TLink(String lid, ReferenciablePorLink referenciaEventTime,
 			ReferenciablePorLink relatedEventTime, TLinkType relType) {
-		super();
-		this.lid = lid;
+		super(lid);
 		this.referenciaEventTime = referenciaEventTime;
 		this.relatedEventTime = relatedEventTime;
 		this.relType = relType;
@@ -71,6 +70,7 @@ public class TLink {
 		this.syntax = syntax;
 	}
 
+	@Override
 	public String getLid() {
 		return lid;
 	}
@@ -85,5 +85,10 @@ public class TLink {
 
 	public TLinkType getRelType() {
 		return relType;
+	}
+
+	@Override
+	public LinkType obtenerTipoDeLink() {
+		return LinkType.TLINK;
 	}
 }

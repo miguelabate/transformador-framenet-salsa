@@ -1,5 +1,6 @@
 package transformador.formatoFramenet;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -7,13 +8,17 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.collections.Closure;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiHashMap;
+import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections.Transformer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import transformador.ClaveDeReferenciable;
-import transformador.ReferenciablePorUnEdgeSalsa;
+import transformador.common.ClaveDeReferenciable;
+import transformador.conversorASalsa.ReferenciablePorUnEdgeSalsa;
 import transformador.formatoSalsa.EdgeSalsa;
 import transformador.formatoSalsa.FeNodeSalsa;
 import transformador.formatoSalsa.FeSalsa;
@@ -21,6 +26,7 @@ import transformador.formatoSalsa.FrameSalsa;
 import transformador.formatoSalsa.NoTerminalSalsa;
 import transformador.formatoSalsa.OracionSalsa;
 import transformador.formatoSalsa.TargetSalsa;
+import transformador.formatoTimeML.ConsumidorTexto;
 
 
 public class Oracion {
@@ -75,6 +81,36 @@ public class Oracion {
 	public List obtenerLabelsEn(int comienzo, int fin){
 		ClaveDeReferenciable clave=new ClaveDeReferenciable(comienzo,fin);
 		return (List) this.tablaReferenciables.get(clave);
+	}
+	
+	public Collection<Label> obtenerLabelsFlexibleEn(Integer comienzo, Integer fin){
+		final ClaveDeReferenciable clave=new ClaveDeReferenciable(comienzo,fin);
+		Collection<ClaveDeReferenciable> referenciablesEncontrado= (Collection<ClaveDeReferenciable>) CollectionUtils.select(this.tablaReferenciables.keySet(), new Predicate() {
+			
+			@Override
+			public boolean evaluate(Object arg0) {
+				return clave.estaIncluidoEn((ClaveDeReferenciable) arg0);
+			}
+		});
+		
+
+		Collection<List> listaDeListaDeLabels=CollectionUtils.collect(referenciablesEncontrado,new Transformer() {
+			
+			@Override
+			public Object transform(Object arg0) {
+				return Oracion.this.tablaReferenciables.get((ClaveDeReferenciable)arg0);
+			}
+		}); 
+		final Collection<Label> resultado= new ArrayList<Label>();
+		CollectionUtils.forAllDo(listaDeListaDeLabels, new Closure() {
+			
+			@Override
+			public void execute(Object arg0) {
+				resultado.addAll((Collection<? extends Label>) arg0);
+				
+			}
+		});
+		return resultado;
 	}
 	
 	public MultiHashMap getTablaReferenciables(){

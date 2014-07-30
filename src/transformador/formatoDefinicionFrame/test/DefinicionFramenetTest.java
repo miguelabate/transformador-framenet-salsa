@@ -40,7 +40,7 @@ public class DefinicionFramenetTest {
 //		System.out.println(definicionFramenet.findFrameElementsLike("Time"));
 //		System.out.println(definicionFramenet.getFramesPreceden("Being_awake"));
 //		System.out.println(definicionFramenet.getFramesPreceden("Getting_up"));
-		System.out.println(definicionFramenet.getRelacionesPrecedes().size());
+//		System.out.println(definicionFramenet.getRelacionesPrecedes().size());
 	}
 
 }

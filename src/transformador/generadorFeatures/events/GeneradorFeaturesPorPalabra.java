@@ -1,4 +1,4 @@
-package transformador.generadorFeatures;
+package transformador.generadorFeatures.events;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
@@ -22,8 +24,9 @@ import transformador.formatoFramenet.Parrafo;
 import transformador.formatoTimeML.ArchivoTimeML;
 import transformador.formatoTimeML.ConsumidorTexto;
 import transformador.formatoTimeML.Event;
+import transformador.generadorFeatures.ArchivosInconsistentesGeneradorFeaturesException;
 
-public abstract class GeneradorFeatures {
+public abstract class GeneradorFeaturesPorPalabra {
 
 	protected ArchivoTimeML archivoTimeML;//archivo timeml que mria ucando quiere sacar el atributo clase, entrenaimiento
 	private ArchivoFormatoFramenet archivoFramenet;//archivo framenet de donde 
@@ -32,8 +35,9 @@ public abstract class GeneradorFeatures {
 	protected Collection<String> framesHijosDeEvent;
 	protected int eventosDetectadosFramenet=0;
 	private int eventosTimeML=0;
+	private float porcentajeATest=0;
 	
-	public GeneradorFeatures(ArchivoTimeML archivoTimeML,
+	public GeneradorFeaturesPorPalabra(ArchivoTimeML archivoTimeML,
 			ArchivoFormatoFramenet archivoFramenet,DefinicionFramenet defFramenet) throws ArchivosInconsistentesGeneradorFeaturesException {
 		super();
 		this.archivoTimeML = archivoTimeML;
@@ -42,16 +46,21 @@ public abstract class GeneradorFeatures {
 		if(!isArchivosConsistentes()) throw new ArchivosInconsistentesGeneradorFeaturesException();
 	}
 	
-	public GeneradorFeatures(ArchivoTimeML archivoTimeML2,
+	public GeneradorFeaturesPorPalabra(ArchivoTimeML archivoTimeML2,
 			ArchivoFormatoFramenet archFrameNet,
-			DefinicionFramenet defFramenet2, String pathArchivoSalida) throws ArchivosInconsistentesGeneradorFeaturesException {
+			DefinicionFramenet defFramenet2, String pathArchivoSalida, float porcentajeATest) throws ArchivosInconsistentesGeneradorFeaturesException {
 		this(archivoTimeML2,archFrameNet,defFramenet2);
 		this.pathArchivoSalida=pathArchivoSalida;
+		this.porcentajeATest=porcentajeATest;
 	}
 
 	public void generarFeatures() throws IOException{
 		FileWriter out = null;
-		if(pathArchivoSalida!=null)out= new FileWriter(pathArchivoSalida,true);
+		FileWriter outtest = null;
+		if(pathArchivoSalida!=null){
+			out= new FileWriter(pathArchivoSalida,true);
+			outtest= new FileWriter(pathArchivoSalida+".test",true);
+		}
 		
 		//dejo preparado todos los frames hijos de Event para consulta
 		this.framesHijosDeEvent=CollectionUtils.collect(this.defFramenet.getFramesHijosTotal("Event"),new Transformer() {
@@ -70,18 +79,18 @@ public abstract class GeneradorFeatures {
 		for(Documento doc:archivoFramenet.getListaDocumentos()){
 			for(Parrafo parrafo:doc.getListaParrafos()){
 				for(Oracion oracion:parrafo.getListaOraciones()){
-					indiceAbsolutoFramenet=obtenerIndiceDeOracionAbsoluto(oracion.getTexto());
-					for(Frame unFrame:oracion.getListaDeFramesAnotados()){
-						String featuresGenerados=this.generarSetDeFeatures(unFrame,unFrame.getTarget(),indiceAbsolutoFramenet);
-						guardarLineaSalida(featuresGenerados,out);
-						ArrayList<Label> listaFESinElTarget=unFrame.getListaFE();
-						if(listaFESinElTarget.contains(unFrame.getTarget()))
-							{
-								listaFESinElTarget.remove(unFrame.getTarget());
-							}
-						for(Label unLabel:listaFESinElTarget){
-							guardarLineaSalida(this.generarSetDeFeatures(unFrame,unLabel,indiceAbsolutoFramenet),out);
-						}
+					//bifurcacion en el guardado
+					FileWriter switchSalida=out;
+					if(Math.random()<this.porcentajeATest)
+						switchSalida=outtest;
+
+					indiceAbsolutoFramenet=obtenerIndiceDeOracionAbsoluto(oracion.getTexto());//indice para ubicarme en el archivo timeml
+					Integer indiceDentroOracion=0;
+					String[] oracionPartida=oracion.getTexto().split(" ");
+					for(int i=0;i<oracionPartida.length;i++){
+						String featuresGenerados=this.generarSetDeFeatures(i,indiceDentroOracion,oracion,indiceAbsolutoFramenet);
+						guardarLineaSalida(featuresGenerados,switchSalida);
+						indiceDentroOracion+=oracionPartida[i].length()+1;
 					}
 				}
 			}
@@ -89,11 +98,14 @@ public abstract class GeneradorFeatures {
 		//logeo cuantos eventos habia en el timeml y cuantos se correspondieron con algo en framenet
 		System.out.println("Eventos Framenet: "+this.eventosDetectadosFramenet+" Eventos en TimeML: "+this.eventosTimeML);
 		
-		if(pathArchivoSalida!=null)out.close();
+		if(pathArchivoSalida!=null){
+			out.close();
+			outtest.close();
+		}
 	}
 
-	protected abstract String generarSetDeFeatures(Frame unFrame, Label label,
-			Integer indiceAbsolutoFramenet);
+	protected abstract String generarSetDeFeatures(int numeroPalabra, Integer indicePalabra,
+			Oracion oracion, Integer indiceAbsolutoFramenet);
 
 	/**
 	 * Dada una oracion de framenet, devuelve el indice en el archivo TimeML. Considera algunas conversiones de formato y le saca el f=punto al final
@@ -128,9 +140,9 @@ public abstract class GeneradorFeatures {
 
 	public void guardarLineaSalida(String linea,FileWriter out) throws IOException{
 		if(out==null)System.out.println(linea);
-		else{
+		else
 			out.write(linea+"\n");
-		}
+		
 	}
 
 	public int getEventosDetectadosFramenet() {

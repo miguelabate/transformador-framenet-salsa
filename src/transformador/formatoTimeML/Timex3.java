@@ -20,6 +20,14 @@ public class Timex3 extends ConsumidorTexto implements ReferenciablePorLink{
 	private String quant;//aparecen en el caso de type SET
 	private String freq;//aparecen en el caso de type SET
 	
+	public Timex3(String tid, Timex3Type type, String value, Integer indiceStart, Integer indiceEnd) {
+		super("", indiceStart);
+		super.end=indiceEnd;
+		this.tid = tid;
+		this.type = type;
+		this.value = value;
+	}
+
 	public Timex3(String tid, Timex3Type type, String value, String contenido, Integer indice) {
 		super(contenido,indice);
 		this.tid = tid;
@@ -39,6 +47,7 @@ public class Timex3 extends ConsumidorTexto implements ReferenciablePorLink{
 		if(nodo.hasAttribute("quant"))this.setQuant(nodo.getAttribute("quant"));
 		if(nodo.hasAttribute("freq"))this.setFreq(nodo.getAttribute("freq"));
 	}
+
 
 	public String getTid() {
 		return tid;
@@ -126,5 +135,52 @@ public class Timex3 extends ConsumidorTexto implements ReferenciablePorLink{
 
 	public void setFreq(String freq) {
 		this.freq = freq;
+	}
+
+	@Override
+	public TipoConsumidorTexto getTipoConsumidorTexto() {
+		return TipoConsumidorTexto.TIMEX3;
+	}
+	
+	@Override
+	public void generarTagTimeML(StringBuilder resultado, int indiceTexto,char caracterEnIndice,
+			ConsumidorTexto consumidorEncontrado) {
+		if(consumidorEncontrado.getStart()==indiceTexto){
+			resultado.append("<TIMEX3>");
+			resultado.append(caracterEnIndice);
+		} else if(consumidorEncontrado.getEnd()-1==indiceTexto){
+			resultado.append(caracterEnIndice);
+			resultado.append("</TIMEX3>");
+		}else{//estoy en el medio de un elemento event
+			resultado.append(caracterEnIndice);
+		}
+	}
+
+	@Override
+	public Boolean esIgualA(ReferenciablePorLink otroReferenciable) {
+		if(otroReferenciable instanceof Timex3){
+			return ((Timex3)otroReferenciable).getTid().equals(this.getTid());
+		}
+		else 
+			return false;//ni es de la misma clase, son diferentes
+	}
+
+	@Override
+	public String toString() {
+		return "Timex3 [tid=" + tid + "]";
+	}
+
+	@Override
+	public Integer distanciaA(ReferenciablePorLink otroReferenciable) {
+		if(otroReferenciable instanceof Timex3){
+			return ((Timex3)otroReferenciable).getStart()-this.getStart();
+		}
+		if(otroReferenciable instanceof MakeInstance){
+			return ((MakeInstance)otroReferenciable).getEventID().getStart()-this.getStart();
+		}
+		if(otroReferenciable instanceof Signal){
+			return ((Signal)otroReferenciable).getStart()-this.getStart();
+		}
+		return null;
 	}
 }

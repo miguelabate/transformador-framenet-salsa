@@ -8,7 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.w3c.dom.Element;
 
-import transformador.ClaveDeReferenciable;
+import transformador.common.ClaveDeReferenciable;
 
 public class Label {
 	

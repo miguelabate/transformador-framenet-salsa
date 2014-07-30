@@ -10,10 +10,10 @@ import transformador.formatoDefinicionFrame.DefinicionFramenet;
 import transformador.formatoFramenet.ArchivoFormatoFramenet;
 import transformador.formatoTimeML.ArchivoTimeML;
 import transformador.generadorFeatures.ArchivosInconsistentesGeneradorFeaturesException;
-import transformador.generadorFeatures.GeneradorFeatures;
-import transformador.generadorFeatures.GeneradorFeaturesCRF;
-import transformador.generadorFeatures.GeneradorFeaturesCRFPorPalabra;
-import transformador.generadorFeatures.GeneradorFeaturesPorPalabra;
+import transformador.generadorFeatures.events.GeneradorFeatures;
+import transformador.generadorFeatures.events.GeneradorFeaturesCRF;
+import transformador.generadorFeatures.events.GeneradorFeaturesCRFPorPalabra;
+import transformador.generadorFeatures.events.GeneradorFeaturesPorPalabra;
 
 public class PrincipalGeneradorFeaturesPorPalabra {
 
@@ -32,7 +32,7 @@ public class PrincipalGeneradorFeaturesPorPalabra {
 		for(File archivoTimeML:dirArchivosTimeML.listFiles()){
 			ArchivoFormatoFramenet archFrameNet = new ArchivoFormatoFramenet(archivosFramenet.get(archivoTimeML.getName()));
 			try {
-				GeneradorFeaturesPorPalabra gf=new GeneradorFeaturesCRFPorPalabra(new ArchivoTimeML(archivoTimeML.getAbsolutePath()), archFrameNet,defFramenet,pathArchivoSalida);
+				GeneradorFeaturesPorPalabra gf=new GeneradorFeaturesCRFPorPalabra(new ArchivoTimeML(archivoTimeML.getAbsolutePath()), archFrameNet,defFramenet,pathArchivoSalida,0.1f);
 				gf.generarFeatures();
 //				System.out.println("Todo OK");
 				totalEventosFramenet+=gf.getEventosDetectadosFramenet();
